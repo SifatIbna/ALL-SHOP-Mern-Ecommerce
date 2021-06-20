@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
 import colors from "colors";
 
-import products from "./data/Product.data.js";
+import products from "./data/products.js";
 
 dotenv.config();
 
