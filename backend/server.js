@@ -1,11 +1,16 @@
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+import express from "express";
+import dotenv from "dotenv";
+import bodyParser from "body-parser";
+import connectDB from "./config/db.js";
+import colors from "colors";
 
-const products = require("./data/Product.data");
+import products from "./data/Product.data.js";
+
+dotenv.config();
+
+connectDB();
 
 const app = express();
-app.use(cors());
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
@@ -21,6 +26,11 @@ app.get("/api/products/:id", (req, res) => {
   res.send(product);
 });
 
-app.listen(5000, () => {
-  console.log("Listening on PORT 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(
+    `Process running in ${process.env.NODE_ENV} mode on PORT ${PORT}`.yellow
+      .bold
+  );
 });
