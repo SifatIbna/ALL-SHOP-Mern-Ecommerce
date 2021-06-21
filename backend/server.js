@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
 import colors from "colors";
 
+import { notFound, errorHandler } from "./middlewares/errorMiddlewares.js";
 import productRoutes from "./routes/productRoutes.js";
 
 dotenv.config();
@@ -14,6 +15,10 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use("/api/products", productRoutes);
+
+app.use(notFound);
+
+app.use(errorHandler);
 
 app.get("/", (req, res) => {
   res.send("API is running..");
