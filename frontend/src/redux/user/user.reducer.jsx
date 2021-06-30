@@ -1,7 +1,7 @@
 import { UserActionType } from "./action.type";
 
 const INITIAL_STATE = {
-  user: null,
+  user: {},
   isLoading: false,
   error: null,
 };
@@ -19,8 +19,15 @@ const UserReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: false,
         user: action.payload,
+        error: null,
       };
     case UserActionType.USER_LOGIN_REQUEST_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+        user: {},
+      };
     case UserActionType.USER_LOGOUT_FAILURE:
       return {
         ...state,
@@ -30,8 +37,9 @@ const UserReducer = (state = INITIAL_STATE, action) => {
     case UserActionType.USER_LOGOUT_SUCCESS:
       return {
         ...state,
-        user: null,
+        user: {},
         isLoading: false,
+        error: null,
       };
     default:
       return state;
