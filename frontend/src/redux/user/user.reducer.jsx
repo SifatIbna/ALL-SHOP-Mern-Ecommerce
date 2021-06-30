@@ -10,11 +10,13 @@ const UserReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case UserActionType.USER_LOGIN_REQUEST_START:
     case UserActionType.USER_LOGOUT_START:
+    case UserActionType.USER_REGISTER_REQUEST_START:
       return {
         ...state,
         isLoading: true,
       };
     case UserActionType.USER_LOGIN_SUCCESS:
+    case UserActionType.USER_REGISTER_REQUEST_SUCCESS:
       return {
         ...state,
         isLoading: false,
@@ -22,6 +24,7 @@ const UserReducer = (state = INITIAL_STATE, action) => {
         error: null,
       };
     case UserActionType.USER_LOGIN_REQUEST_FAILURE:
+    case UserActionType.USER_REGISTER_REQUEST_FAILURE:
       return {
         ...state,
         isLoading: false,
