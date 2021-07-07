@@ -8,7 +8,7 @@ export const fetchProductListStart = () => ({
 export const fetchProductListAsync = () => async (dispatch) => {
   try {
     dispatch(fetchProductListStart());
-    const { data } = await axios.get("/api/products");
+    const { data } = await axios.get("http://192.168.0.107:5000/api/products");
     dispatch(fetchProductListSuccess(data));
   } catch (error) {
     // const errorMsg =
@@ -36,7 +36,9 @@ export const fetchSingleProductListStart = () => ({
 export const fetchSingleProductAsync = (id) => async (dispatch) => {
   try {
     dispatch(fetchSingleProductListStart());
-    const { data } = await axios.get(`/api/products/${id}`);
+    const { data } = await axios.get(
+      `http://192.168.0.107:5000/api/products/${id}`
+    );
     dispatch(fetchSingleProductSuccess(data));
   } catch (error) {
     dispatch(fetchSingleProductFailure(error.message));
