@@ -15,12 +15,12 @@ export const addItemToCart = (cartItems, cartItemToAdd) => {
 };
 
 export const filterCartItem = (cartItems, cartItemToFilter) => {
-  return cartItems.filter((cartItem) => cartItem.id !== cartItemToFilter.id);
+  return cartItems.filter((cartItem) => cartItem._id !== cartItemToFilter._id);
 };
 
 export const removeItemFromCart = (cartItems, cartItemToRemove) => {
   const existingCartItem = cartItems.find(
-    (cartItem) => cartItem.id === cartItemToRemove.id
+    (cartItem) => cartItem._id === cartItemToRemove._id
   );
 
   if (existingCartItem.quantity === 1) {
