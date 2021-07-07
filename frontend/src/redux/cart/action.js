@@ -21,7 +21,9 @@ export const clearItemFromCart = (item) => (dispatch, getState) => {
 // });
 
 export const addToCartAsync = (id, quantity) => async (dispatch, getState) => {
-  const { data } = await axios.get(`/api/products/${id}`);
+  const { data } = await axios.get(
+    `http://192.168.0.107:5000/api/products/${id}`
+  );
   dispatch(addItem({ ...data, quantity: quantity }));
   localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 };

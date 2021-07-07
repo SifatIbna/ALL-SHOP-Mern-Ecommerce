@@ -28,7 +28,7 @@ export const LoginRequestAsync =
       };
 
       const { data } = await axios.post(
-        "/api/users/login",
+        "http://192.168.0.107:5000/api/users/login",
         { email, password },
         config
       );
@@ -86,7 +86,7 @@ export const RegisterRequestAsync =
       };
 
       const { data } = await axios.post(
-        "/api/users",
+        "http://192.168.0.107:5000/api/users",
         { name, email, password },
         config
       );
@@ -97,5 +97,99 @@ export const RegisterRequestAsync =
     } catch (error) {
       console.log(error);
       dispatch(UserRegisterFailure(error.message));
+    }
+  };
+
+export const UserDetailsStart = () => ({
+  type: UserActionType.USER_DETAILS_REQUEST_START,
+});
+
+export const UserDetailsSuccess = (data) => ({
+  type: UserActionType.USER_DETAILS_REQUEST_SUCCESS,
+  payload: data,
+});
+
+export const UserDetailsfailure = (message) => ({
+  type: UserActionType.USER_DETAILS_REQUEST_FAILURE,
+  payload: message,
+});
+
+export const getUserDetailsAsync = (id) => async (dispatch, getState) => {
+  try {
+    dispatch(UserDetailsStart());
+    const {
+      user: { user },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `http://192.168.0.107:5000/api/users/profile`,
+      config
+    );
+    dispatch(UserDetailsSuccess(data));
+  } catch (err) {
+    const payload =
+      err.response && err.response.data.message
+        ? err.response.data.message
+        : err.message;
+
+    dispatch(UserDetailsfailure(err.message));
+  }
+};
+
+// USER_PROFILE_UPDATE_REQ_START: "USER_PROFILE_UPDATE_REQ_START",
+// USER_PROFILE_UPDATE_REQ_SUCEESS: "USER_PROFILE_UPDATE_REQ_SUCEESS",
+// USER_PROFILE_UPDATE_REQ_FAILURE: "USER_PROFILE_UPDATE_REQ_FAILURE",
+
+export const UserUpdateStart = () => ({
+  type: UserActionType.USER_PROFILE_UPDATE_REQ_START,
+});
+
+export const UserUpdateSuccess = (data) => ({
+  type: UserActionType.USER_PROFILE_UPDATE_REQ_SUCEESS,
+  payload: data,
+});
+
+export const UserUpdatedFailure = (error) => ({
+  type: UserActionType.USER_PROFILE_UPDATE_REQ_FAILURE,
+  payload: error,
+});
+
+export const userUpdateProfileAsync =
+  (updatedUser) => async (dispatch, getState) => {
+    try {
+      dispatch(UserUpdateStart());
+      const {
+        user: { user },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${user.token}`,
+        },
+      };
+      console.log(updatedUser);
+      const { data } = await axios.put(
+        `http://192.168.0.107:5000/api/users/profile`,
+        updatedUser,
+        config
+      );
+      console.log(data);
+      dispatch(UserUpdateSuccess(data));
+    } catch (err) {
+      console.log(err);
+      const payload =
+        err.response && err.response.data.message
+          ? err.response.data.message
+          : err.message;
+
+      dispatch(UserUpdatedFailure(err.message));
     }
   };

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
 import colors from "colors";
+import cors from "cors";
 
 import { notFound, errorHandler } from "./middlewares/errorMiddlewares.js";
 import productRoutes from "./routes/productRoutes.js";
@@ -15,6 +16,7 @@ connectDB();
 const app = express();
 // app.use(bodyParser.json());
 app.use(express.json());
+app.use(cors());
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
