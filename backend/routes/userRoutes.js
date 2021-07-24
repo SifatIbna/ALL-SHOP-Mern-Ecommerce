@@ -5,6 +5,7 @@ import {
   registerUser,
   getUserProfile,
   updateUserProfile,
+  apiLoginTest,
 } from "../controllers/userController.js";
 import protect from "../middlewares/authMiddleware.js";
 
@@ -16,5 +17,6 @@ router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
+router.post("/login/test", apiLoginTest);
 
 export default router;
