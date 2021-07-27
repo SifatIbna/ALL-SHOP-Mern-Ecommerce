@@ -20,10 +20,16 @@ export const clearItemFromCart = (item) => (dispatch, getState) => {
 //   payload: item,
 // });
 
-export const addToCartAsync = (id, quantity) => async (dispatch, getState) => {
-  const { data } = await axios.get(
-    `http://192.168.0.107:5000/api/products/${id}`
-  );
-  dispatch(addItem({ ...data, quantity: quantity }));
-  localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
-};
+export const addToCartAsync =
+  (id, quantity, size, color) => async (dispatch, getState) => {
+    const { data } = await axios.get(
+      `http://192.168.0.107:5000/api/products/${id}`
+    );
+    dispatch(
+      addItem({ ...data, quantity: quantity, size: size, color: color })
+    );
+    localStorage.setItem(
+      "cartItems",
+      JSON.stringify(getState().cart.cartItems)
+    );
+  };
