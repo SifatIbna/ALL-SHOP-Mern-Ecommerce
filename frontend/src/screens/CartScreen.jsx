@@ -18,16 +18,20 @@ import Message from "../component/Alert/Message";
 
 const CartScreen = ({ match, location, history }) => {
   const productId = match.params.id;
-  const quantity = location.search ? Number(location.search.split("=")[1]) : 1;
+
+  const splitValues = location.search ? location.search.split("&") : null;
+  const quantity = splitValues !== null && Number(splitValues[0].split("=")[1]);
+  const color = splitValues !== null && splitValues[1].split("=")[1];
+  const size = splitValues !== null && splitValues[2].split("=")[1];
 
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
 
   useEffect(() => {
     if (productId) {
-      dispatch(addToCartAsync(productId, quantity));
+      dispatch(addToCartAsync(productId, quantity, size, color));
     }
-  }, [dispatch, productId, quantity]);
+  }, [dispatch, productId, quantity, color, size]);
 
   const checkoutHandler = () => {
     history.push("/login?redirect=shipping");

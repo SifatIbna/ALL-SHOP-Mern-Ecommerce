@@ -10,7 +10,11 @@ import Loader from "../component/spinner/Loader";
 import Message from "../component/Alert/Message";
 
 const ProductScreen = ({ history, match }) => {
-  const [quantity, setQuantity] = useState(1);
+  const [productAddons, setAddons] = useState({
+    quantity: 1,
+    color: "red",
+    size: "regular",
+  });
 
   const dispatch = useDispatch();
 
@@ -19,7 +23,9 @@ const ProductScreen = ({ history, match }) => {
   }, [match.params.id, dispatch]);
 
   const addToCartHandler = () => {
-    history.push(`/cart/${match.params.id}?qty=${quantity}`);
+    history.push(
+      `/cart/${match.params.id}?quantity=${productAddons.quantity}&color=${productAddons.color}&size=${productAddons.size}`
+    );
   };
 
   const { product, loading, error } = useSelector((state) => state.product);
@@ -67,6 +73,57 @@ const ProductScreen = ({ history, match }) => {
                     </Col>
                   </Row>
                 </ListGroup.Item>
+                {product.length !== 0 && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Available Sizes:</Col>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          value={productAddons.size}
+                          onChange={(e) =>
+                            setAddons({
+                              ...productAddons,
+                              size: e.target.value,
+                            })
+                          }
+                        >
+                          {product.size.map((value, index) => (
+                            <option key={index + 1} value={value}>
+                              {value}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                )}
+
+                {product.length !== 0 && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Available Colors:</Col>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          value={productAddons.color}
+                          onChange={(e) =>
+                            setAddons({
+                              ...productAddons,
+                              color: e.target.value,
+                            })
+                          }
+                        >
+                          {product.color.map((value, index) => (
+                            <option key={index + 1} value={value}>
+                              {value}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                )}
 
                 <ListGroup.Item>
                   <Row>
@@ -84,8 +141,13 @@ const ProductScreen = ({ history, match }) => {
                       <Col>
                         <Form.Control
                           as="select"
-                          value={quantity}
-                          onChange={(e) => setQuantity(e.target.value)}
+                          value={productAddons.quantity}
+                          onChange={(e) =>
+                            setAddons({
+                              ...productAddons,
+                              quantity: e.target.value,
+                            })
+                          }
                         >
                           {[...Array(product.countInStock).keys()].map(
                             (value) => (
