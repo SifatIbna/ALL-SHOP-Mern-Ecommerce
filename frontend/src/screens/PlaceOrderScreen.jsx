@@ -1,27 +1,57 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../component/spinner/Loader";
 import Message from "../component/Alert/Message";
 
 import CheckoutSteps from "../component/checkout/CheckoutSteps";
 
-const PlaceOrderScreen = () => {
+import { orderRequestAsync } from "../redux/order/action";
+
+const PlaceOrderScreen = ({ history }) => {
+  const dispatch = useDispatch();
+
   const { cartItems } = useSelector((state) => state.cart);
   const { shippingAddress } = useSelector((state) => state.shipping);
   const { paymentMethod } = useSelector((state) => state.payment);
-  const shippingPrice = cartItems.length !== 0 ? 100 : 0;
+  const { order, error, loading, success } = useSelector(
+    (state) => state.order
+  );
+
+  const shippingPrice = cartItems.length !== 0 ? Number(100) : 0;
   const cartItemTotalPrice =
     cartItems.length !== 0
-      ? cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0)
+      ? cartItems
+          .reduce((acc, item) => acc + item.quantity * item.price, 0)
+          .toFixed(2)
       : 0;
-  const totalPrice = shippingPrice + cartItemTotalPrice;
+  const totalPrice = Number(shippingPrice) + Number(cartItemTotalPrice);
 
-  const placeOrderHandler = () => {};
+  useEffect(() => {
+    if (success) {
+      history.push(`order/${order._id}`);
+    }
+    // eslint-disable-next-line
+  }, [history, success]);
+
+  const placeOrderHandler = () => {
+    dispatch(
+      orderRequestAsync({
+        orderItems: cartItems,
+        shippingAddress: shippingAddress,
+        paymentMethod: paymentMethod,
+        itemsPrice: Number(cartItemTotalPrice),
+        shippingPrice: Number(shippingPrice),
+        taxPrice: Number(0.05 * Number(cartItemTotalPrice)),
+        totalPrice: Number(totalPrice),
+      })
+    );
+  };
 
   return (
     <>
+      {loading && <Loader />}
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>
@@ -96,6 +126,8 @@ const PlaceOrderScreen = () => {
                   <Col>${totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+              {error && <Message variant="danger">{error}</Message>}
+              <ListGroup.Item></ListGroup.Item>
               <ListGroup.Item
                 className="btn btn-dark"
                 disabled={cartItems.length === 0}

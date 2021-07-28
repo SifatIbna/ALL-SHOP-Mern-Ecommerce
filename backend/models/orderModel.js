@@ -9,11 +9,11 @@ const orderSchema = mongoose.Schema(
     },
     orderItems: [
       {
-        name: { type: String, required: true },
-        qty: { type: Number, required: true },
         image: { type: String, required: true },
+        name: { type: String, required: true },
         price: { type: Number, required: true },
-        product: {
+        quantity: { type: Number, required: true },
+        _id: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
           ref: "Product",
@@ -39,22 +39,22 @@ const orderSchema = mongoose.Schema(
     taxPrice: {
       type: Number,
       required: true,
-      defualt: 0.0,
+      default: 0.0,
     },
     shippingPrice: {
       type: Number,
       required: true,
-      defualt: 0.0,
+      default: 0.0,
     },
     totalPrice: {
       type: Number,
       required: true,
-      defualt: 0.0,
+      default: 0.0,
     },
     isPaid: {
       type: Boolean,
       required: true,
-      defualt: false,
+      default: false,
     },
     paidAt: {
       type: Date,
@@ -62,7 +62,7 @@ const orderSchema = mongoose.Schema(
     isDelivered: {
       type: Boolean,
       required: true,
-      defualt: false,
+      default: false,
     },
     deliveredAt: {
       type: Date,
@@ -74,4 +74,5 @@ const orderSchema = mongoose.Schema(
 );
 
 const Order = mongoose.model("Order", orderSchema);
+
 export default Order;
