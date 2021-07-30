@@ -122,6 +122,37 @@ export const payOrder = (id, paymentResult) => async (dispatch, getState) => {
     dispatch(OrderPayRequestFailure(err.message));
   }
 };
+export const deliverOrder = (order) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: OrderActionType.ORDER_DELIVER_REQUEST_START });
+
+    const {
+      user: { user },
+    } = getState();
+
+    console.log(user);
+    const config = {
+      headers: {
+        authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `http://192.168.0.107:5000/api/orders/${order._id}/deliver`,
+      {},
+      config
+    );
+    dispatch({
+      type: OrderActionType.ORDER_DELIVER_REQUEST_SUCEES,
+      payload: data,
+    });
+  } catch (err) {
+    dispatch({
+      type: OrderActionType.ORDER_DELIVER_REQUEST_FAILED,
+      action: err.message,
+    });
+  }
+};
 
 export const GetMyOrdersStart = () => ({
   type: OrderActionType.ORDER_LIST_MY_REQUEST_START,
@@ -160,5 +191,30 @@ export const GetMyOrdersAsync = () => async (dispatch, getState) => {
     dispatch(GetMyOrdersSuccess(data));
   } catch (err) {
     dispatch(GetMyOrdersFailure(err.message));
+  }
+};
+export const GetOrdersAsync = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: OrderActionType.GET_ALL_ORDER_START });
+
+    const {
+      user: { user },
+    } = getState();
+
+    console.log(user);
+    const config = {
+      headers: {
+        authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `http://192.168.0.107:5000/api/orders`,
+
+      config
+    );
+    dispatch({ type: OrderActionType.GET_ALL_ORDER_SUCCESS, payload: data });
+  } catch (err) {
+    dispatch({ type: OrderActionType.GET_ALL_ORDER_FAIL });
   }
 };

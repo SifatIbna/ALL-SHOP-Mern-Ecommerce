@@ -8,12 +8,14 @@ import Loader from "../component/spinner/Loader";
 import Message from "../component/Alert/Message";
 import Product from "../component/Product/Product.component";
 
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
+  const keyword = match.params.keyword;
+  console.log(keyword);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchProductListAsync());
-  }, [dispatch]);
+    dispatch(fetchProductListAsync(keyword));
+  }, [dispatch, keyword]);
 
   const productList = useSelector((state) => state.product);
   const { loading, error, products } = productList;

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ProductActionType } from "../product/action.type";
 import { UserActionType } from "./action.type";
 
 export const UserLoginStart = () => ({
@@ -57,6 +58,7 @@ export const LogoutRequestAsync = () => (dispatch) => {
   dispatch(LogoutStart());
   localStorage.removeItem("userInfo");
   dispatch(LogoutSuccess());
+  dispatch({ type: UserActionType.USER_LIST_RESET });
 };
 
 export const UserRegisterStart = () => ({
@@ -193,3 +195,145 @@ export const userUpdateProfileAsync =
       dispatch(UserUpdatedFailure(err.message));
     }
   };
+
+export const UserListAsync = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: UserActionType.USER_LIST_REQ_START,
+    });
+    const {
+      user: { user },
+    } = getState();
+
+    const config = {
+      headers: {
+        authorization: `Bearer ${user.token}`,
+      },
+    };
+    const { data } = await axios.get(
+      `http://192.168.0.107:5000/api/users`,
+      config
+    );
+    dispatch({ type: UserActionType.USER_LIST_REQ_SUCEESS, payload: data });
+  } catch (err) {
+    console.log(err);
+    const payload =
+      err.response && err.response.data.message
+        ? err.response.data.message
+        : err.message;
+
+    dispatch({
+      type: UserActionType.USER_LIST_REQ_FAILURE,
+      payload: err.message,
+    });
+  }
+};
+export const DeleteUserAsync = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: UserActionType.USER_DELETE_START,
+    });
+    const {
+      user: { user },
+    } = getState();
+
+    const config = {
+      headers: {
+        authorization: `Bearer ${user.token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `http://192.168.0.107:5000/api/users/${id}`,
+      config
+    );
+    dispatch({ type: UserActionType.USER_DELETE_SUCCESS });
+  } catch (err) {
+    console.log(err);
+    const payload =
+      err.response && err.response.data.message
+        ? err.response.data.message
+        : err.message;
+
+    dispatch({
+      type: UserActionType.USER_DELETE_FAILURE,
+      payload: err.message,
+    });
+  }
+};
+
+export const userProfileUpdateAdmin =
+  (updatedUser) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: UserActionType.USER_UPDATE_REQUEST_START });
+      const {
+        user: { user },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${user.token}`,
+        },
+      };
+      console.log(updatedUser);
+      const { data } = await axios.put(
+        `http://192.168.0.107:5000/api/users/${updatedUser._id}`,
+        updatedUser,
+        config
+      );
+      dispatch({ type: UserActionType.USER_UPDATE_REQUEST_SUCCESS });
+      dispatch({
+        type: "USER_DETAILS_REQUEST_SUCCESS",
+        payload: data,
+      });
+    } catch (err) {
+      console.log(err);
+      const payload =
+        err.response && err.response.data.message
+          ? err.response.data.message
+          : err.message;
+
+      dispatch({
+        type: UserActionType.USER_UPDATE_REQUEST_FAIL,
+        payload: err.message,
+      });
+    }
+  };
+
+export const getUserDetails = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: "USER_DETAILS_REQUEST",
+    });
+
+    const {
+      user: { user },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    console.log(id);
+    const { data } = await axios.get(
+      `http://192.168.0.107:5000/api/users/${id}`,
+      config
+    );
+
+    dispatch({
+      type: "USER_DETAILS_SUCCESS",
+      payload: data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+
+    dispatch({
+      type: "USER_DETAILS_FAIL",
+      payload: message,
+    });
+  }
+};

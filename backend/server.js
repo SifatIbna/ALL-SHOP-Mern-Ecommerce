@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 // import bodyParser from "body-parser";
@@ -9,6 +10,7 @@ import { notFound, errorHandler } from "./middlewares/errorMiddlewares.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoute from "./routes/orderRoute.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 
 dotenv.config();
 
@@ -22,6 +24,13 @@ app.use(cors());
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoute);
+app.use("/api/upload", uploadRoutes);
+
+const __dirname = path.resolve();
+// console.log(__dirname);
+const finalPath = path.join(__dirname, "\\uploads");
+console.log(finalPath);
+app.use("/uploads", express.static(path.join(__dirname, "\\uploads")));
 
 app.get("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)

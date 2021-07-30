@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   error: undefined,
 };
 
-const ProductReducer = (state = INITIAL_STATE, action) => {
+export const ProductReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ProductActionType.FETCH_PRODUCT_LIST_REQUEST_START:
     case ProductActionType.SINGLE_PRODUCT_FETCH_START:
@@ -39,4 +39,70 @@ const ProductReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default ProductReducer;
+export const ProductDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ProductActionType.PRODUCT_DELETE_START:
+      return {
+        loading: true,
+      };
+    case ProductActionType.PRODUCT_DELETE_SUCCESS:
+      return {
+        success: true,
+        loading: false,
+      };
+    case ProductActionType.PRODUCT_DELETE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+export const ProductCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ProductActionType.PRODUCT_CREATE_START:
+      return {
+        loading: true,
+      };
+    case ProductActionType.PRODUCT_CREATE_SUCCESS:
+      return {
+        success: true,
+        loading: false,
+        product: action.payload,
+      };
+    case ProductActionType.PRODUCT_CREATE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case ProductActionType.PRODUCT_CREATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+export const ProductUpdateReducer = (state = { product: {} }, action) => {
+  switch (action.type) {
+    case ProductActionType.PRODUCT_UPDATE_START:
+      return {
+        loading: true,
+      };
+    case ProductActionType.PRODUCT_UPDATE_SUCCESS:
+      return {
+        success: true,
+        loading: false,
+        product: action.payload,
+      };
+    case ProductActionType.PRODUCT_UPDATE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case ProductActionType.PRODUCT_UPDATE_RESET:
+      return { product: {} };
+    default:
+      return state;
+  }
+};
+// export default ProductReducer;
