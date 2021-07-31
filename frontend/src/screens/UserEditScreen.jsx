@@ -14,7 +14,6 @@ import {
 
 const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id;
-  console.log(userId);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);

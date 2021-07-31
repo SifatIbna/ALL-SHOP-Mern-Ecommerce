@@ -96,7 +96,6 @@ export const RegisterRequestAsync =
       dispatch(UserLoginSuccess(data));
       localStorage.setItem("userInfo", JSON.stringify(data));
     } catch (error) {
-      console.log(error);
       dispatch(UserRegisterFailure(error.message));
     }
   };
@@ -132,18 +131,9 @@ export const getUserDetailsAsync = (id) => async (dispatch, getState) => {
     const { data } = await axios.get(`/api/users/profile`, config);
     dispatch(UserDetailsSuccess(data));
   } catch (err) {
-    const payload =
-      err.response && err.response.data.message
-        ? err.response.data.message
-        : err.message;
-
     dispatch(UserDetailsfailure(err.message));
   }
 };
-
-// USER_PROFILE_UPDATE_REQ_START: "USER_PROFILE_UPDATE_REQ_START",
-// USER_PROFILE_UPDATE_REQ_SUCEESS: "USER_PROFILE_UPDATE_REQ_SUCEESS",
-// USER_PROFILE_UPDATE_REQ_FAILURE: "USER_PROFILE_UPDATE_REQ_FAILURE",
 
 export const UserUpdateStart = () => ({
   type: UserActionType.USER_PROFILE_UPDATE_REQ_START,
@@ -173,21 +163,15 @@ export const userUpdateProfileAsync =
           authorization: `Bearer ${user.token}`,
         },
       };
-      console.log(updatedUser);
+
       const { data } = await axios.put(
         `/api/users/profile`,
         updatedUser,
         config
       );
-      console.log(data);
+
       dispatch(UserUpdateSuccess(data));
     } catch (err) {
-      console.log(err);
-      const payload =
-        err.response && err.response.data.message
-          ? err.response.data.message
-          : err.message;
-
       dispatch(UserUpdatedFailure(err.message));
     }
   };
@@ -209,12 +193,6 @@ export const UserListAsync = () => async (dispatch, getState) => {
     const { data } = await axios.get(`/api/users`, config);
     dispatch({ type: UserActionType.USER_LIST_REQ_SUCEESS, payload: data });
   } catch (err) {
-    console.log(err);
-    const payload =
-      err.response && err.response.data.message
-        ? err.response.data.message
-        : err.message;
-
     dispatch({
       type: UserActionType.USER_LIST_REQ_FAILURE,
       payload: err.message,
@@ -235,15 +213,9 @@ export const DeleteUserAsync = (id) => async (dispatch, getState) => {
         authorization: `Bearer ${user.token}`,
       },
     };
-    const { data } = await axios.delete(`/api/users/${id}`, config);
+    await axios.delete(`/api/users/${id}`, config);
     dispatch({ type: UserActionType.USER_DELETE_SUCCESS });
   } catch (err) {
-    console.log(err);
-    const payload =
-      err.response && err.response.data.message
-        ? err.response.data.message
-        : err.message;
-
     dispatch({
       type: UserActionType.USER_DELETE_FAILURE,
       payload: err.message,
@@ -265,7 +237,7 @@ export const userProfileUpdateAdmin =
           authorization: `Bearer ${user.token}`,
         },
       };
-      console.log(updatedUser);
+
       const { data } = await axios.put(
         `/api/users/${updatedUser._id}`,
         updatedUser,
@@ -277,12 +249,6 @@ export const userProfileUpdateAdmin =
         payload: data,
       });
     } catch (err) {
-      console.log(err);
-      const payload =
-        err.response && err.response.data.message
-          ? err.response.data.message
-          : err.message;
-
       dispatch({
         type: UserActionType.USER_UPDATE_REQUEST_FAIL,
         payload: err.message,
@@ -305,7 +271,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${user.token}`,
       },
     };
-    console.log(id);
+
     const { data } = await axios.get(`/api/users/${id}`, config);
 
     dispatch({

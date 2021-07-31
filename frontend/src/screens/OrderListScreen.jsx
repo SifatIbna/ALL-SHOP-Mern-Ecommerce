@@ -11,11 +11,7 @@ import { GetOrdersAsync } from "../redux/order/action";
 const OrderListScreen = ({ history }) => {
   const dispatch = useDispatch();
   const { loading, error, orders } = useSelector((state) => state.getAllOrder);
-  const {
-    user,
-    error: userError,
-    isLoading,
-  } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (user && user.isAdmin) {

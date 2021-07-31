@@ -39,15 +39,11 @@ const ProductScreen = ({ history, match }) => {
 
   const { product, loading, error } = useSelector((state) => state.product);
 
-  const {
-    user: userInfo,
-    isLoading,
-    error: userError,
-  } = useSelector((state) => state.user);
+  const { user: userInfo } = useSelector((state) => state.user);
 
   const {
     success,
-    loading: reviewLoading,
+
     error: reviewError,
   } = useSelector((state) => state.productReviews);
 

@@ -13,15 +13,12 @@ export const orderRequestAsync = (order) => async (dispatch, getState) => {
       user: { user },
     } = getState();
 
-    console.log(user);
     const config = {
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${user.token}`,
       },
     };
-
-    console.log(order);
 
     const { data } = await axios.post(`/api/orders`, order, config);
     dispatch(OrderRequestSuccess(data));
@@ -62,7 +59,6 @@ export const getOrderDetailsAsync = (id) => async (dispatch, getState) => {
       user: { user },
     } = getState();
 
-    console.log(user);
     const config = {
       headers: {
         authorization: `Bearer ${user.token}`,
@@ -97,7 +93,6 @@ export const payOrder = (id, paymentResult) => async (dispatch, getState) => {
       user: { user },
     } = getState();
 
-    console.log(user);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -123,7 +118,6 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
       user: { user },
     } = getState();
 
-    console.log(user);
     const config = {
       headers: {
         authorization: `Bearer ${user.token}`,
@@ -169,7 +163,6 @@ export const GetMyOrdersAsync = () => async (dispatch, getState) => {
       user: { user },
     } = getState();
 
-    console.log(user);
     const config = {
       headers: {
         authorization: `Bearer ${user.token}`,
@@ -194,7 +187,6 @@ export const GetOrdersAsync = () => async (dispatch, getState) => {
       user: { user },
     } = getState();
 
-    console.log(user);
     const config = {
       headers: {
         authorization: `Bearer ${user.token}`,

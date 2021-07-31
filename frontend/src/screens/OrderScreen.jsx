@@ -21,19 +21,13 @@ const OrderScreen = ({ match }) => {
 
   const dispatch = useDispatch();
 
-  //   const { loading, error, success, order } = useSelector(
-  //     (state) => state.orderDetials
-  //   );
-
   const orderDetails = useSelector((state) => state.orderDetails);
-  const { order, loading, error, success } = orderDetails;
+  const { order, loading, error } = orderDetails;
   const { user } = useSelector((state) => state.user);
 
-  const {
-    loading: loadingPay,
-    success: successPay,
-    error: errorPay,
-  } = useSelector((state) => state.orderPay);
+  const { loading: loadingPay, success: successPay } = useSelector(
+    (state) => state.orderPay
+  );
 
   const {
     loading: loadingDeliver,
@@ -68,7 +62,6 @@ const OrderScreen = ({ match }) => {
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult));
-    console.log(paymentResult);
   };
 
   const deliverHandler = () => {

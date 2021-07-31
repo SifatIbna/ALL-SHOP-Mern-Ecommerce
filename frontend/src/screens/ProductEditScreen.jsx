@@ -7,9 +7,6 @@ import Message from "../component/Alert/Message";
 import Loader from "../component/spinner/Loader";
 import FormContainer from "../component/Form/Form.container";
 import {
-  fetchProductListAsync,
-  deleteProductAsync,
-  ProductCreate,
   fetchSingleProductAsync,
   productUpdate,
 } from "../redux/product/product.action";
@@ -34,28 +31,6 @@ const ProductEditScreen = ({ match, history }) => {
     success,
   } = useSelector((state) => state.productUpdate);
 
-  //   const userDetails = useSelector((state) => state.userDetails);
-
-  //   const {
-  //     loading: loadingUpdate,
-  //     error: errorUpdate,
-  //     success: successUpdate,
-  //   } = userDetails;
-
-  //   useEffect(() => {
-  //     if (successUpdate) {
-  //       dispatch({ type: UserActionType.USER_UPDATE_RESET });
-  //       history.push("/admin/userlist");
-  //     } else {
-  //       if (!user.name || user._id !== userId) {
-  //         dispatch(getUserDetailsAsync(userId));
-  //       } else {
-  //         setName(user.name);
-  //         setEmail(user.email);
-  //         setIsAdmin(user.isAdmin);
-  //       }
-  //     }
-  //   }, [dispatch, history, userId, user, successUpdate]);
   useEffect(() => {
     if (success) {
       dispatch({ type: "PRODUCT_UPDATE_RESET" });
@@ -105,7 +80,7 @@ const ProductEditScreen = ({ match, history }) => {
       };
 
       const { data } = await axios.post("/api/upload", formData, config);
-      console.log(data);
+
       setImage(data);
       setUploading(false);
     } catch (error) {

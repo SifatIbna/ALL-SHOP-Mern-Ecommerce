@@ -32,11 +32,7 @@ const ProductListScreen = ({ history, match }) => {
     error: errorCreate,
     product: createdProduct,
   } = useSelector((state) => state.productCeate);
-  const {
-    user,
-    error: userError,
-    isLoading,
-  } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch({ type: "PRODUCT_CREATE_REST" });

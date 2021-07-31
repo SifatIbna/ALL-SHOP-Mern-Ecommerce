@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
-import { Link } from "react-router-dom";
 import { Form, Button, Row, Col, Table } from "react-bootstrap";
 
 import Message from "../component/Alert/Message";
@@ -21,9 +20,7 @@ const UserProfileScreen = ({ location, history }) => {
 
   const dispatch = useDispatch();
   const { user, isLoading, error } = useSelector((state) => state.user);
-  const { updatedUser, pending, updateError } = useSelector(
-    (state) => state.update
-  );
+  const { updatedUser, pending } = useSelector((state) => state.update);
   const {
     orders,
     loading,
@@ -59,7 +56,6 @@ const UserProfileScreen = ({ location, history }) => {
         message: "Password Do not match",
       });
     } else {
-      // UPDATE PROFILE
       dispatch(
         userUpdateProfileAsync({
           _id: user._id,
@@ -83,9 +79,7 @@ const UserProfileScreen = ({ location, history }) => {
           <Message variant="danger">{userCredentials.message}</Message>
         )}
         {error && <Message variant="danger">{error}</Message>}
-        {/* {updateError === null && (
-          <Message variant="success">Profile Updated</Message>
-        )} */}
+
         {isLoading && <Loader />}
         {pending && <Loader />}
         <Form onSubmit={handleSubmit}>

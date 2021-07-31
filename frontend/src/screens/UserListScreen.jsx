@@ -11,11 +11,7 @@ import { UserListAsync, DeleteUserAsync } from "../redux/user/user.action";
 const UserListScreen = ({ history }) => {
   const dispatch = useDispatch();
   const { loading, error, users } = useSelector((state) => state.userList);
-  const {
-    user,
-    error: userError,
-    isLoading,
-  } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
   const {
     loading: deleteLoading,

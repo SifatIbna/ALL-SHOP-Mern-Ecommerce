@@ -186,8 +186,6 @@ export const createProductReview =
         },
       };
 
-      console.log(review);
-
       await axios.post(`/api/products/${productId}/reviews`, review, config);
 
       dispatch({
