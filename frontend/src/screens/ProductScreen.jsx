@@ -23,6 +23,8 @@ import { ProductActionType } from "../redux/product/action.type";
 import Loader from "../component/spinner/Loader";
 import Message from "../component/Alert/Message";
 
+import Meta from "../component/Meta/Meta";
+
 const ProductScreen = ({ history, match }) => {
   const [productAddons, setAddons] = useState({
     quantity: 1,
@@ -87,6 +89,7 @@ const ProductScreen = ({ history, match }) => {
       ) : (
         product.length !== 0 && (
           <>
+            <Meta title={product.name} />
             <Row>
               <Col md={6}>
                 <Image src={product.image} alt={product.name} fluid />
