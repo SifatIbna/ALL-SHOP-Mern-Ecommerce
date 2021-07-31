@@ -27,28 +27,6 @@ const UserEditScreen = ({ match, history }) => {
     error: updateError,
   } = useSelector((state) => state.userUpdate);
 
-  //   const userDetails = useSelector((state) => state.userDetails);
-
-  //   const {
-  //     loading: loadingUpdate,
-  //     error: errorUpdate,
-  //     success: successUpdate,
-  //   } = userDetails;
-
-  //   useEffect(() => {
-  //     if (successUpdate) {
-  //       dispatch({ type: UserActionType.USER_UPDATE_RESET });
-  //       history.push("/admin/userlist");
-  //     } else {
-  //       if (!user.name || user._id !== userId) {
-  //         dispatch(getUserDetailsAsync(userId));
-  //       } else {
-  //         setName(user.name);
-  //         setEmail(user.email);
-  //         setIsAdmin(user.isAdmin);
-  //       }
-  //     }
-  //   }, [dispatch, history, userId, user, successUpdate]);
   useEffect(() => {
     if (success) {
       dispatch({ type: "USER_UPDATE_RESET" });
@@ -66,6 +44,7 @@ const UserEditScreen = ({ match, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log(isAdmin);
     dispatch(userProfileUpdateAdmin({ _id: userId, name, email, isAdmin }));
   };
 
