@@ -11,7 +11,7 @@ export const fetchProductListAsync =
     try {
       dispatch(fetchProductListStart());
       const { data } = await axios.get(
-        `http://192.168.0.107:5000/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+        `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
       );
       dispatch(fetchProductListSuccess(data));
     } catch (error) {
@@ -26,9 +26,7 @@ export const fetchProductListAsync =
 export const fetchTopProducts = () => async (dispatch) => {
   try {
     dispatch({ type: ProductActionType.PRODUCT_TOP_REQ_START });
-    const { data } = await axios.get(
-      "http://192.168.0.107:5000/api/products/top"
-    );
+    const { data } = await axios.get("/api/products/top");
     dispatch({
       type: ProductActionType.PRODUCT_TOP_REQ_SUCCESS,
       payload: data,
@@ -62,9 +60,7 @@ export const fetchSingleProductListStart = () => ({
 export const fetchSingleProductAsync = (id) => async (dispatch) => {
   try {
     dispatch(fetchSingleProductListStart());
-    const { data } = await axios.get(
-      `http://192.168.0.107:5000/api/products/${id}`
-    );
+    const { data } = await axios.get(`/api/products/${id}`);
     dispatch(fetchSingleProductSuccess(data));
   } catch (error) {
     dispatch(fetchSingleProductFailure(error.message));
@@ -93,7 +89,7 @@ export const deleteProductAsync = (id) => async (dispatch, getState) => {
         authorization: `Bearer ${user.token}`,
       },
     };
-    await axios.delete(`http://192.168.0.107:5000/api/products/${id}`, config);
+    await axios.delete(`/api/products/${id}`, config);
     dispatch({ type: "PRODUCT_DELETE_SUCCESS" });
   } catch (error) {
     // const errorMsg =
@@ -119,11 +115,7 @@ export const ProductCreate = () => async (dispatch, getState) => {
         authorization: `Bearer ${user.token}`,
       },
     };
-    const { data } = await axios.post(
-      `http://192.168.0.107:5000/api/products`,
-      {},
-      config
-    );
+    const { data } = await axios.post(`/api/products`, {}, config);
     dispatch({ type: "PRODUCT_CREATE_SUCCESS", payload: data });
   } catch (error) {
     // const errorMsg =
@@ -154,7 +146,7 @@ export const productUpdate = (product) => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.put(
-      `http://192.168.0.107:5000/api/products/${product._id}`,
+      `/api/products/${product._id}`,
       product,
       config
     );
@@ -196,11 +188,7 @@ export const createProductReview =
 
       console.log(review);
 
-      await axios.post(
-        `http://192.168.0.107:5000/api/products/${productId}/reviews`,
-        review,
-        config
-      );
+      await axios.post(`/api/products/${productId}/reviews`, review, config);
 
       dispatch({
         type: ProductActionType.PRODUCT_CREATE_REVIEW_SUCCESS,

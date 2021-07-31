@@ -23,11 +23,7 @@ export const orderRequestAsync = (order) => async (dispatch, getState) => {
 
     console.log(order);
 
-    const { data } = await axios.post(
-      `http://192.168.0.107:5000/api/orders`,
-      order,
-      config
-    );
+    const { data } = await axios.post(`/api/orders`, order, config);
     dispatch(OrderRequestSuccess(data));
   } catch (err) {
     dispatch(OrderReuqestFailure(err.message));
@@ -73,10 +69,7 @@ export const getOrderDetailsAsync = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(
-      `http://192.168.0.107:5000/api/orders/${id}`,
-      config
-    );
+    const { data } = await axios.get(`/api/orders/${id}`, config);
     dispatch(OrderDetialsSuccess(data));
   } catch (err) {
     dispatch(OrderDetailsFailure(err.message));
@@ -113,7 +106,7 @@ export const payOrder = (id, paymentResult) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.put(
-      `http://192.168.0.107:5000/api/orders/${id}/pay`,
+      `/api/orders/${id}/pay`,
       paymentResult,
       config
     );
@@ -138,7 +131,7 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.put(
-      `http://192.168.0.107:5000/api/orders/${order._id}/deliver`,
+      `/api/orders/${order._id}/deliver`,
       {},
       config
     );
@@ -184,7 +177,7 @@ export const GetMyOrdersAsync = () => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      `http://192.168.0.107:5000/api/orders/myorders`,
+      `/api/orders/myorders`,
 
       config
     );
@@ -209,7 +202,7 @@ export const GetOrdersAsync = () => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      `http://192.168.0.107:5000/api/orders`,
+      `/api/orders`,
 
       config
     );

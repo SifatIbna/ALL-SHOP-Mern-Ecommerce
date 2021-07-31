@@ -1,5 +1,4 @@
 import axios from "axios";
-import { ProductActionType } from "../product/action.type";
 import { UserActionType } from "./action.type";
 
 export const UserLoginStart = () => ({
@@ -29,7 +28,7 @@ export const LoginRequestAsync =
       };
 
       const { data } = await axios.post(
-        "http://192.168.0.107:5000/api/users/login",
+        "/api/users/login",
         { email, password },
         config
       );
@@ -88,7 +87,7 @@ export const RegisterRequestAsync =
       };
 
       const { data } = await axios.post(
-        "http://192.168.0.107:5000/api/users",
+        "/api/users",
         { name, email, password },
         config
       );
@@ -130,10 +129,7 @@ export const getUserDetailsAsync = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(
-      `http://192.168.0.107:5000/api/users/profile`,
-      config
-    );
+    const { data } = await axios.get(`/api/users/profile`, config);
     dispatch(UserDetailsSuccess(data));
   } catch (err) {
     const payload =
@@ -179,7 +175,7 @@ export const userUpdateProfileAsync =
       };
       console.log(updatedUser);
       const { data } = await axios.put(
-        `http://192.168.0.107:5000/api/users/profile`,
+        `/api/users/profile`,
         updatedUser,
         config
       );
@@ -210,10 +206,7 @@ export const UserListAsync = () => async (dispatch, getState) => {
         authorization: `Bearer ${user.token}`,
       },
     };
-    const { data } = await axios.get(
-      `http://192.168.0.107:5000/api/users`,
-      config
-    );
+    const { data } = await axios.get(`/api/users`, config);
     dispatch({ type: UserActionType.USER_LIST_REQ_SUCEESS, payload: data });
   } catch (err) {
     console.log(err);
@@ -242,10 +235,7 @@ export const DeleteUserAsync = (id) => async (dispatch, getState) => {
         authorization: `Bearer ${user.token}`,
       },
     };
-    const { data } = await axios.delete(
-      `http://192.168.0.107:5000/api/users/${id}`,
-      config
-    );
+    const { data } = await axios.delete(`/api/users/${id}`, config);
     dispatch({ type: UserActionType.USER_DELETE_SUCCESS });
   } catch (err) {
     console.log(err);
@@ -277,7 +267,7 @@ export const userProfileUpdateAdmin =
       };
       console.log(updatedUser);
       const { data } = await axios.put(
-        `http://192.168.0.107:5000/api/users/${updatedUser._id}`,
+        `/api/users/${updatedUser._id}`,
         updatedUser,
         config
       );
@@ -316,10 +306,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       },
     };
     console.log(id);
-    const { data } = await axios.get(
-      `http://192.168.0.107:5000/api/users/${id}`,
-      config
-    );
+    const { data } = await axios.get(`/api/users/${id}`, config);
 
     dispatch({
       type: "USER_DETAILS_SUCCESS",
