@@ -6,6 +6,8 @@ import { Button, Table, Row, Col } from "react-bootstrap";
 import Message from "../component/Alert/Message";
 import Loader from "../component/spinner/Loader";
 
+import Paginate from "../component/Paginate/Paginate";
+
 import {
   fetchProductListAsync,
   deleteProductAsync,
@@ -13,8 +15,12 @@ import {
 } from "../redux/product/product.action";
 
 const ProductListScreen = ({ history, match }) => {
+  const pageNumber = match.params.pageNumber || 1;
+
   const dispatch = useDispatch();
-  const { products, loading, error } = useSelector((state) => state.product);
+  const { products, loading, error, pages, page } = useSelector(
+    (state) => state.product
+  );
   const {
     success,
     loading: loadingDelete,
@@ -35,14 +41,22 @@ const ProductListScreen = ({ history, match }) => {
   useEffect(() => {
     dispatch({ type: "PRODUCT_CREATE_REST" });
     if (user && user.isAdmin) {
-      dispatch(fetchProductListAsync());
+      dispatch(fetchProductListAsync("", pageNumber));
     } else {
       history.push("/login");
     }
     if (successCreate) {
       history.push(`/admin/product/${createdProduct._id}/edit`);
     }
-  }, [dispatch, history, user, success, successCreate, createdProduct]);
+  }, [
+    dispatch,
+    history,
+    user,
+    success,
+    successCreate,
+    createdProduct,
+    pageNumber,
+  ]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure?")) {
@@ -75,43 +89,46 @@ const ProductListScreen = ({ history, match }) => {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Table striped bordered hover responsive className="table-sm">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>PRICE</th>
-              <th>CATEGORY</th>
-              <th>BRAND</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product._id}>
-                <td>{product._id}</td>
-                <td>{product.name}</td>
-                <td>${product.price}</td>
-                <td>{product.category}</td>
-                <td>{product.brand}</td>
-                <td>
-                  <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                    <Button variant="light" className="btn-sm">
-                      <i className="fas fa-edit" />
-                    </Button>
-                  </LinkContainer>
-                  <Button
-                    variant="danger"
-                    className="btn-sm"
-                    onClick={() => deleteHandler(product._id)}
-                  >
-                    <i className="fas fa-trash" />
-                  </Button>
-                </td>
+        <>
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>PRICE</th>
+                <th>CATEGORY</th>
+                <th>BRAND</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {products.map((product) => (
+                <tr key={product._id}>
+                  <td>{product._id}</td>
+                  <td>{product.name}</td>
+                  <td>${product.price}</td>
+                  <td>{product.category}</td>
+                  <td>{product.brand}</td>
+                  <td>
+                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                      <Button variant="light" className="btn-sm">
+                        <i className="fas fa-edit" />
+                      </Button>
+                    </LinkContainer>
+                    <Button
+                      variant="danger"
+                      className="btn-sm"
+                      onClick={() => deleteHandler(product._id)}
+                    >
+                      <i className="fas fa-trash" />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Paginate pages={pages} page={page} isAdmin />
+        </>
       )}
     </>
   );

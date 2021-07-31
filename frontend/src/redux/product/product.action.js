@@ -6,12 +6,12 @@ export const fetchProductListStart = () => ({
 });
 
 export const fetchProductListAsync =
-  (keyword = "") =>
+  (keyword = "", pageNumber = "") =>
   async (dispatch) => {
     try {
       dispatch(fetchProductListStart());
       const { data } = await axios.get(
-        `http://192.168.0.107:5000/api/products?keyword=${keyword}`
+        `http://192.168.0.107:5000/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
       );
       dispatch(fetchProductListSuccess(data));
     } catch (error) {
@@ -22,6 +22,28 @@ export const fetchProductListAsync =
       dispatch(fetchProductListFailure(error.message));
     }
   };
+
+export const fetchTopProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: ProductActionType.PRODUCT_TOP_REQ_START });
+    const { data } = await axios.get(
+      "http://192.168.0.107:5000/api/products/top"
+    );
+    dispatch({
+      type: ProductActionType.PRODUCT_TOP_REQ_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    // const errorMsg =
+    //   error.response && error.message.data.message
+    //     ? error.response.data.message
+    //     : error.message;
+    dispatch({
+      type: ProductActionType.PRODUCT_TOP_REQ_FAIL,
+      payload: error.message,
+    });
+  }
+};
 
 export const fetchProductListSuccess = (productList) => ({
   type: ProductActionType.PRODUCT_LIST_FETCH_SUCCESS,
@@ -153,3 +175,45 @@ export const productUpdate = (product) => async (dispatch, getState) => {
     });
   }
 };
+
+export const createProductReview =
+  (productId, review) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: ProductActionType.PRODUCT_CREATE_REVIEW_START,
+      });
+
+      const {
+        user: { user },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      console.log(review);
+
+      await axios.post(
+        `http://192.168.0.107:5000/api/products/${productId}/reviews`,
+        review,
+        config
+      );
+
+      dispatch({
+        type: ProductActionType.PRODUCT_CREATE_REVIEW_SUCCESS,
+      });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      dispatch({
+        type: ProductActionType.PRODUCT_CREATE_REVIEW_FAIL,
+        payload: message,
+      });
+    }
+  };

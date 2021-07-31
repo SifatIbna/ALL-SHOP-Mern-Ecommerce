@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 // import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
 import colors from "colors";
+import morgan from "morgan";
 import cors from "cors";
 
 import { notFound, errorHandler } from "./middlewares/errorMiddlewares.js";
@@ -17,6 +18,11 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan("dev"));
+}
+
 // app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
